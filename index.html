@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; manifest-src 'self'; worker-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta name="theme-color" content="#0B1F33">
+<meta name="color-scheme" content="light">
+<title>Carte de visite</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+  :root {
+    --navy: #0B1F33; --navy-2: #133556; --accent: #0B5CAD; --accent-soft: #7CD0FF;
+    --ink: #0F172A; --muted: #4A5B6E; --line: #D6DEE8; --bg: #E9EEF4; --surface: #FFFFFF;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { margin: 0; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg); color: var(--ink); -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body.salon-open { overflow: hidden; }
+  .card { max-width: 480px; margin: 0 auto; min-height: 100vh; min-height: 100dvh; background: var(--surface);
+    display: flex; flex-direction: column; box-shadow: 0 0 0 1px rgba(15,23,42,.04), 0 10px 40px rgba(11,31,51,.10); }
+  .hero {
+    color: #fff; text-align: center; padding: calc(32px + env(safe-area-inset-top)) 24px 30px;
+    background:
+      linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px),
+      linear-gradient(165deg, var(--navy) 0%, var(--navy-2) 100%);
+    background-size: 22px 22px, 22px 22px, auto;
+  }
+  .avatar {
+    width: 92px; height: 92px; margin: 0 auto 16px; border-radius: 50%;
+    display: grid; place-items: center; font-size: 32px; font-weight: 700; letter-spacing: 1px;
+    background: rgba(255,255,255,.08); border: 2px solid var(--accent-soft); overflow: hidden;
+  }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; }
+  h1 { margin: 0; font-size: 27px; line-height: 1.15; letter-spacing: .3px; }
+  .titre { margin: 8px 0 0; color: var(--accent-soft); font-size: 13.5px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; }
+  .accroche { margin: 12px auto 0; max-width: 34ch; font-size: 14.5px; line-height: 1.45; opacity: .9; }
+  .badges { list-style: none; margin: 16px 0 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+  .badges li { font-size: 12.5px; padding: 5px 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,.28); background: rgba(255,255,255,.06); }
+  .mobilite { margin: 14px 0 0; font-size: 13px; opacity: .82; }
+  .seg { white-space: nowrap; }
+  .chiffres { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 18px auto 0; max-width: 420px; }
+  .kpi { padding: 10px 4px; border-radius: 10px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.16); }
+  .kpi strong { display: block; font-size: 17px; line-height: 1.15; color: #fff; white-space: nowrap; }
+  .kpi span { display: block; margin-top: 3px; font-size: 11.5px; line-height: 1.25; color: rgba(255,255,255,.82); }
+  @media (max-width: 360px) { .chiffres { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .salon-photo { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2px solid var(--line); }
+  .actions { padding: 22px 20px 8px; display: grid; gap: 12px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid > .btn:only-child { grid-column: 1 / -1; }
+  #cv-grid .btn { font-size: 15px; padding: 12px 10px; }
+  .btn {
+    min-height: 52px; padding: 12px 16px; border-radius: var(--radius); border: 1px solid transparent;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    font: inherit; font-size: 16px; font-weight: 600; text-decoration: none; cursor: pointer;
+    transition: transform .08s ease, filter .15s ease;
+  }
+  .btn:active { transform: scale(.98); }
+  .btn:focus-visible, .tab:focus-visible, .btn-link:focus-visible { outline: 3px solid var(--accent-soft); outline-offset: 2px; }
+  .btn svg { width: 22px; height: 22px; flex: none; }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-secondary { background: var(--navy); color: #fff; }
+  .btn-ghost { background: #F2F5F9; color: var(--navy); border-color: var(--line); }
+  .foot { margin-top: auto; text-align: center; padding: 10px 20px calc(22px + env(safe-area-inset-bottom)); }
+  .btn-link { background: none; border: none; color: var(--accent); font: inherit; font-size: 15px; font-weight: 600;
+    text-decoration: underline; text-underline-offset: 3px; padding: 12px; cursor: pointer; }
+  .offline { margin: 6px 0 0; font-size: 13px; color: var(--muted); }
+
+  /* Mode salon : QR plein écran, fond blanc pour un contraste maximal */
+  .salon {
+    position: fixed; inset: 0; z-index: 10; background: #fff; color: var(--ink);
+    display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+    padding: calc(14px + env(safe-area-inset-top)) 16px calc(16px + env(safe-area-inset-bottom));
+  }
+  .tabs { display: grid; grid-template-columns: repeat(var(--n, 2), minmax(0, 1fr)); gap: 4px; width: min(100%, 460px); padding: 4px;
+    background: #EEF2F6; border-radius: 12px; }
+  .tab { min-height: 44px; padding: 0 2px; border: 0; border-radius: 9px; background: transparent; color: var(--muted);
+    font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  @media (max-width: 360px) { .tabs { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .tab[aria-selected="true"] { background: #fff; color: var(--navy); box-shadow: 0 1px 3px rgba(15,23,42,.18); }
+  .tab:disabled { opacity: .45; }
+  .salon-centre { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
+  .salon-nom { margin: 0; font-size: 20px; text-align: center; }
+  .salon-titre { margin: 0; font-size: 13px; color: var(--muted); letter-spacing: 1.2px; text-transform: uppercase; }
+  .qr-box { width: min(92vw, 58vh, 460px); aspect-ratio: 1 / 1; }
+  .qr-box svg { width: 100%; height: 100%; display: block; }
+  .qr-legende { margin: 0; max-width: 36ch; text-align: center; font-size: 15px; line-height: 1.4; color: #253244; }
+  .salon-bas { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: min(100%, 460px); }
+  .salon-bas .btn-action { grid-column: 1 / -1; }
+  .salon-bas .btn { font-size: 15px; padding: 10px 8px; }
+  .install .btn { width: 100%; }
+  .install { margin: 0 20px; padding: 14px 16px; border-radius: var(--radius); background: #EAF4FF; border: 1px solid #B9DAFB; }
+  .install p { margin: 0 0 10px; font-size: 14.5px; line-height: 1.4; color: var(--navy); }
+  .install .btn:disabled { opacity: .5; }
+  .toast { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom)); transform: translateX(-50%);
+    z-index: 20; background: var(--navy); color: #fff; padding: 12px 18px; border-radius: 12px; font-size: 15px;
+    box-shadow: 0 8px 24px rgba(11,31,51,.3); max-width: 90vw; }
+  @media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
+</style>
+</head>
+<body>
+<main class="card" id="carte">
+  <header class="hero">
+    <div class="avatar" id="avatar" aria-hidden="true"></div>
+    <h1 id="nom"></h1>
+    <p class="titre" id="titre"></p>
+    <p class="accroche" id="accroche"></p>
+    <ul class="badges" id="badges" aria-label="Certifications et expertises"></ul>
+    <div class="chiffres" id="chiffres" aria-label="Chiffres clés"></div>
+    <p class="mobilite" id="mobilite"></p>
+  </header>
+
+  <section class="install" id="install" aria-label="Installation" hidden>
+    <p id="install-txt">Installez la carte sur ce téléphone : elle s'ouvrira comme une application, même sans réseau.</p>
+    <button type="button" id="btn-install" class="btn btn-primary">Installer l'application</button>
+  </section>
+
+  <section class="actions" aria-label="Actions">
+    <button type="button" id="btn-vcf" class="btn btn-primary">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg>
+      Enregistrer le contact
+    </button>
+    <div class="grid" id="cv-grid">
+      <a id="btn-cv" class="btn btn-secondary" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M12 18v-6M9 15l3 3 3-3"/></svg>
+        <span class="lbl">CV (PDF)</span>
+      </a>
+    </div>
+    <div class="grid">
+      <a id="btn-tel" class="btn btn-ghost">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>
+        <span class="lbl">Appeler</span>
+      </a>
+      <a id="btn-mail" class="btn btn-ghost">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+        E-mail
+      </a>
+      <a id="btn-linkedin" class="btn btn-ghost" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/></svg>
+        LinkedIn
+      </a>
+      <a id="btn-whatsapp" class="btn btn-ghost" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.6A8.4 8.4 0 1 1 21 11.5z"/></svg>
+        WhatsApp
+      </a>
+      <button type="button" id="btn-share" class="btn btn-ghost">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>
+        Partager
+      </button>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <button type="button" id="btn-salon" class="btn-link">Afficher les QR codes</button>
+    <p id="offline" class="offline" hidden>Hors ligne : le QR « Contact » reste utilisable.</p>
+  </footer>
+</main>
+
+<section id="salon" class="salon" role="dialog" aria-modal="true" aria-labelledby="salon-nom" hidden>
+  <div class="tabs" id="tabs" role="tablist" aria-label="Type de QR code"></div>
+  <div class="salon-centre">
+    <img id="salon-photo" class="salon-photo" alt="" hidden>
+    <h2 class="salon-nom" id="salon-nom"></h2>
+    <p class="salon-titre" id="salon-titre"></p>
+    <div class="qr-box" id="qr-box"></div>
+    <p class="qr-legende" id="qr-legende"></p>
+  </div>
+  <div class="salon-bas">
+    <button type="button" id="btn-action" class="btn btn-primary btn-action">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg>
+      <span id="btn-action-lbl">Envoyer</span>
+    </button>
+    <button type="button" id="btn-png" class="btn btn-ghost">Enregistrer l'image</button>
+    <button type="button" id="btn-close" class="btn btn-secondary">Fermer</button>
+  </div>
+</section>
+
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="config.js"></script>
+<script src="qrcode.js"></script>
+<script src="vcard.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

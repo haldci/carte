@@ -1,0 +1,84 @@
+{
+  "name": "Carte de visite — Halim ALLAOUI",
+  "short_name": "Ma carte",
+  "description": "Carte de visite numérique : coordonnées, CV FR/EN, LinkedIn et QR codes utilisables hors ligne.",
+  "lang": "fr",
+  "dir": "ltr",
+  "id": "./",
+  "start_url": "./?mode=salon",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0B1F33",
+  "theme_color": "#0B1F33",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "QR Contact (sans réseau)",
+      "short_name": "QR Contact",
+      "url": "./?mode=salon&qr=contact",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "QR CV en français",
+      "short_name": "QR CV FR",
+      "url": "./?mode=salon&qr=cv-fr",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "QR CV in English",
+      "short_name": "QR CV EN",
+      "url": "./?mode=salon&qr=cv-en",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "QR LinkedIn",
+      "short_name": "QR LinkedIn",
+      "url": "./?mode=salon&qr=linkedin",
+      "icons": [
+        {
+          "src": "icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ]
+}
